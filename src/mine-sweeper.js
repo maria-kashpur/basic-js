@@ -23,9 +23,27 @@ const { NotImplementedError } = require('../extensions/index.js');
  *  [1, 1, 1]
  * ]
  */
-function minesweeper(/* matrix */) {
-  throw new NotImplementedError('Not implemented');
-  // remove line with error and write your code here
+function minesweeper(matrix) {
+  let result = []
+  matrix.forEach((row, posRow, field) => {
+    let value = row.reduce((convertRow, el, index) => {
+      let coordinates = {
+        topLeft: field[posRow - 1] === undefined ? 0 : field[posRow - 1][index - 1] === true ? 1 : 0,
+        topCenter: field[posRow - 1] === undefined ? 0 : field[posRow - 1][index] === true ? 1 : 0,
+        topRight: field[posRow - 1] === undefined ? 0 : field[posRow - 1][index + 1] === true ? 1 : 0,
+        right: row[index + 1] === true ? 1 : 0,
+        left: row[index - 1] === true ? 1 : 0,
+        bottomLeft: field[posRow + 1] === undefined ? 0 : field[posRow + 1][index - 1] === true ? 1 : 0,
+        bottomCenter: field[posRow + 1] === undefined ? 0 : field[posRow + 1][index] === true ? 1 : 0,
+        bottomRight: field[posRow + 1] === undefined ? 0 : field[posRow + 1][index + 1] === true ? 1 : 0,
+      }
+      let num = Object.values(coordinates).reduce((sum, el) => sum += el)
+      convertRow.push(num)
+      return convertRow
+    }, [])
+    result.push(value)
+  })
+  return result
 }
 
 module.exports = {
